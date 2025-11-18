@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.testlang</groupId>
+    <artifactId>testlang-dsl</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>TestLang++ DSL Compiler</name>
+    <description>DSL for HTTP API testing compiled to JUnit 5 tests</description>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <junit.version>5.9.2</junit.version>
+    </properties>
+
+    <dependencies>
+        <!-- JUnit 5 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- CUP dependency for exec plugin -->
+        <dependency>
+            <groupId>com.github.vbmacher</groupId>
+            <artifactId>java-cup</artifactId>
+            <version>11b-20160615-3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- CUP Runtime as system scope -->
+        <dependency>
+            <groupId>cup</groupId>
+            <artifactId>cup-runtime</artifactId>
+            <version>11b</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/java-cup-11b-runtime.jar</systemPath>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+
+            <!-- Exec Plugin for JFlex and CUP -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <!-- Generate Lexer with JFlex -->
+                    <execution>
+                        <id>generate-lexer</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>jflex.Main</mainClass>
+                            <arguments>
+                                <argument>-d</argument>
+                                <argument>${project.basedir}/src/main/java</argument>
+                                <argument>${project.basedir}/src/main/jflex/scanner.flex</argument>
+                            </arguments>
+                            <classpathScope>system</classpathScope>
+                            <includeProjectDependencies>false</includeProjectDependencies>
+                            <includePluginDependencies>true</includePluginDependencies>
+                        </configuration>
+                    </execution>
+
+                    <!-- Generate Parser with CUP -->
+                    <execution>
+                        <id>generate-parser</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>java_cup.Main</mainClass>
+                            <arguments>
+                                <argument>-parser</argument>
+                                <argument>Parser</argument>
+                                <argument>-symbols</argument>
+                                <argument>sym</argument>
+                                <argument>-destdir</argument>
+                                <argument>${project.basedir}/src/main/java</argument>
+                                <argument>${project.basedir}/src/main/cup/parser.cup</argument>
+                            </arguments>
+                            <classpathScope>system</classpathScope>
+                            <includeProjectDependencies>false</includeProjectDependencies>
+                            <includePluginDependencies>true</includePluginDependencies>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <!-- JFlex dependency for exec plugin -->
+                    <dependency>
+                        <groupId>de.jflex</groupId>
+                        <artifactId>jflex</artifactId>
+                        <version>1.9.1</version>
+                    </dependency>
+                    <!-- CUP dependency for exec plugin -->
+                    <dependency>
+                        <groupId>com.github.vbmacher</groupId>
+                        <artifactId>java-cup</artifactId>
+                        <version>11b-20160615</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <!-- Surefire Plugin for JUnit -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
