@@ -1,4 +1,4 @@
-
+java -jar lib\jflex-full-1.9.1.jar -d src/main/java src/main/jflex/scanner.flex
 # 1. generate parser
 java -jar "lib\java-cup-11b.jar" -parser Parser -symbols sym -destdir src/main/java -expect 2 src/main/cup/parser.cup
 # 1. Create AST classes first
