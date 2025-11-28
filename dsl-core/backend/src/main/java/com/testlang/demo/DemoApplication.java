@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @SpringBootApplication
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api")
 public class DemoApplication {
 
@@ -79,5 +80,6 @@ public class DemoApplication {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
 
 }

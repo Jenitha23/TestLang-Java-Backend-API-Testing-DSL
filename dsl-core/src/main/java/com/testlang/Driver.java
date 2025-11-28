@@ -1,10 +1,10 @@
 package com.testlang;
 
-import com.testlang.lexer.Lexer;
 import com.testlang.ast.Program;
 import com.testlang.codegen.JUnitGenerator;
 import java_cup.runtime.Symbol;
 import com.testlang.parser.*;
+import com.testlang.lexer.*;
 
 import java.io.*;
 

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/TestLang-Java-Backend-API-Testing-DSL.iml" filepath="$PROJECT_DIR$/.idea/TestLang-Java-Backend-API-Testing-DSL.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testlang-frontend/testlang-frontend.iml" filepath="$PROJECT_DIR$/testlang-frontend/testlang-frontend.iml" />
     </modules>
   </component>
 </project>

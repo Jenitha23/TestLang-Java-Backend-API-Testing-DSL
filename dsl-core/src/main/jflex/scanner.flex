@@ -5,6 +5,7 @@ import com.testlang.parser.sym;
 
 %%
 
+%public
 %class Lexer
 %unicode
 %cup
